@@ -28,7 +28,7 @@ const loginUser = async (req, res) => {
 };
 
 
-// used this user id as the data and generate and return token
+
 const createToken = (id) => {
     const secret = process.env.JWT_SECRET || 'default_secret_key';
     return jwt.sign({ id }, secret);
@@ -39,13 +39,13 @@ const createToken = (id) => {
 const registerUser = async (req, res) => {
     const { name, password, email } = req.body;
     try {
-        // checking if user already exists
+        
         const exists = await userModel.findOne({ email });
         if (exists) {
             return res.json({ success: false, message: "User already exists" });
         }
 
-        // validating email format & strong password
+        
         if (!validator.isEmail(email)) {
             return res.json({ success: false, message: "Please enter a valid email" });
         }
@@ -54,7 +54,7 @@ const registerUser = async (req, res) => {
             return res.json({ success: false, message: "Please enter a strong password" });
         }
 
-        // hashing user password
+        
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
