@@ -17,7 +17,7 @@ const placeOrder = async (req, res) => {
         });
         await newOrder.save();
 
-        // Clear user's cart data
+        
         await userModel.findByIdAndUpdate(req.body.userId, { cartData: {} });
 
         
