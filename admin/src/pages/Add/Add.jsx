@@ -29,7 +29,7 @@ const Add = ({ url }) => {
     formData.append("category", data.category);
     formData.append("image", image);
 
-    // Log form data to check if it's being set correctly
+    
     console.log("Form Data being submitted:");
     console.log([...formData.entries()]);
 
