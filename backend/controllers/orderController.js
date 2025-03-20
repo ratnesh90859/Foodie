@@ -4,11 +4,11 @@ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// Placing user order for frontend
+// Placing user order 
 const placeOrder = async (req, res) => {
     const frontend_url = "http://localhost:5173";
     try {
-        // Create and save new order
+        
         const newOrder = new orderModel({
             userId: req.body.userId,
             items: req.body.items,
@@ -20,31 +20,31 @@ const placeOrder = async (req, res) => {
         // Clear user's cart data
         await userModel.findByIdAndUpdate(req.body.userId, { cartData: {} });
 
-        // Prepare line items for Stripe Checkout
+        
         const line_items = req.body.items.map((item) => ({
             price_data: {
-                currency: 'usd', // Make sure all prices are in the same currency
+                currency: 'usd', 
                 product_data: {
                     name: item.name,
                 },
-                unit_amount: item.price * 100, // Amount in cents
+                unit_amount: item.price * 100,
             },
             quantity: item.quantity,
         }));
 
-        // Add delivery charges to line items
+        
         line_items.push({
             price_data: {
-                currency: "usd", // Use the same currency as above
+                currency: "usd", 
                 product_data: {
                     name: "Delivery Charges",
                 },
-                unit_amount: 2 * 100, // Amount in cents
+                unit_amount: 2 * 100, 
             },
             quantity: 1,
         });
 
-        // Create a Stripe Checkout session
+        
         const session = await stripe.checkout.sessions.create({
             line_items: line_items,
             mode: 'payment',
@@ -87,7 +87,7 @@ const userOrders = async (req, res) => {
   //listing orders for admin pannel
   const listOrders = async (req, res) => {
     try {
-      const orders = await orderModel.find({});//display all orders
+      const orders = await orderModel.find({});
       res.json({ success: true, data: orders });
     } catch (error) {
       console.log(error);
